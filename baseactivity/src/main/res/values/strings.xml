@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">BaseActivity</string>
+
+    <string name="navigation_drawer_communicate">Communicate</string>
+    <string name="navigation_drawer_send_email">Send an email to developer</string>
+
+    <!--TODO change translations -->
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 </resources>

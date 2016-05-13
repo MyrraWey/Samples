@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/navigation_drawer_main_group"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/navigation_drawer_first"
+            android:icon="@android:drawable/ic_menu_send"
+            android:title="First activity"/>
+
+        <item
+            android:id="@+id/navigation_drawer_second"
+            android:icon="@android:drawable/ic_menu_send"
+            android:title="Second activity"/>
+
+        <item
+            android:id="@+id/navigation_drawer_third"
+            android:icon="@android:drawable/ic_menu_send"
+            android:title="Third activity"/>
+
+    </group>
+
+    <item android:title="@string/navigation_drawer_communicate">
+
+        <menu>
+
+            <item
+                android:id="@+id/navigation_drawer_send_email"
+                android:icon="@drawable/ic_menu_send"
+                android:title="@string/navigation_drawer_send_email"/>
+
+        </menu>
+
+    </item>
+
+</menu>
