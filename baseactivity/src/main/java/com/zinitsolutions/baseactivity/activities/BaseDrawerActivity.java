@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
@@ -26,6 +27,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
 
     private final BaseDrawerLoadingStrategy mLoadingStrategy = getLoadingStrategy();
     private ActionBarDrawerToggle mDrawerToggle;
+    private int[] mHiddenNavigationItems;
 
     private final OnNavigationItemSelectedListener mNavigationItemSelectedListener = new OnNavigationItemSelectedListener() {
         @Override
@@ -89,8 +91,10 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
             mDrawer.addDrawerListener(mDrawerToggle);
         }
 
+        mHiddenNavigationItems = mLoadingStrategy.getHiddenNavigationItems();
         mNavigation.setNavigationItemSelectedListener(mNavigationItemSelectedListener);
         checkNavigationViewItems();
+        changeNavigationViewItemsVisibility();
     }
 
     @Override
@@ -148,6 +152,14 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
     protected void uncheckNavigationViewItems() {
         for (int i = 0; i < mNavigation.getMenu().size(); i++) {
             mNavigation.getMenu().getItem(i).setChecked(false);
+        }
+    }
+
+    protected void changeNavigationViewItemsVisibility() {
+        Menu menu = mNavigation.getMenu();
+
+        for (int resourceId : mHiddenNavigationItems) {
+            menu.findItem(resourceId).setVisible(false);
         }
     }
 }

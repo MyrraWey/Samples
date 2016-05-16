@@ -25,4 +25,11 @@ public class HomeLoadingStrategy implements BaseDrawerLoadingStrategy {
     public boolean isDisplayHomeAsUpEnabled() {
         return false;
     }
+
+    @Override
+    public int[] getHiddenNavigationItems() {
+        return new int[]{
+                R.id.navigation_drawer_communicate_group
+        };
+    }
 }

@@ -22,7 +22,9 @@
 
     </group>
 
-    <item android:title="@string/navigation_drawer_communicate">
+    <item
+        android:id="@+id/navigation_drawer_communicate_group"
+        android:title="@string/navigation_drawer_communicate">
 
         <menu>
 

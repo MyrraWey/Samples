@@ -11,4 +11,6 @@ public interface BaseDrawerLoadingStrategy {
     String getActionBarTitle();
 
     boolean isDisplayHomeAsUpEnabled();
+
+    int[] getHiddenNavigationItems();
 }

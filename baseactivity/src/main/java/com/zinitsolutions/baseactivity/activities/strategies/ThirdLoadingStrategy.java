@@ -25,4 +25,11 @@ public class ThirdLoadingStrategy implements BaseDrawerLoadingStrategy {
     public boolean isDisplayHomeAsUpEnabled() {
         return true;
     }
+
+    @Override
+    public int[] getHiddenNavigationItems() {
+        return new int[]{
+                R.id.navigation_drawer_third
+        };
+    }
 }

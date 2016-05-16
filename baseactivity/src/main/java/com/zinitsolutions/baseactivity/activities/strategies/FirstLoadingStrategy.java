@@ -25,4 +25,11 @@ public class FirstLoadingStrategy implements BaseDrawerLoadingStrategy {
     public boolean isDisplayHomeAsUpEnabled() {
         return true;
     }
+
+    @Override
+    public int[] getHiddenNavigationItems() {
+        return new int[]{
+                R.id.navigation_drawer_first
+        };
+    }
 }
