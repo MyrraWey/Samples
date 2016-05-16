@@ -1,4 +1,4 @@
-package com.zinitsolutions.baseactivity;
+package com.zinitsolutions.baseactivity.activities;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -8,6 +8,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.NavigationView.OnNavigationItemSelectedListener;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -15,11 +16,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import com.zinitsolutions.baseactivity.R;
+import com.zinitsolutions.baseactivity.activities.strategies.BaseDrawerLoadingStrategy;
+
 public abstract class BaseDrawerActivity extends AppCompatActivity {
     private DrawerLayout mDrawer;
     private NavigationView mNavigation;
     private Toolbar mToolbar;
 
+    private final BaseDrawerLoadingStrategy mLoadingStrategy = getLoadingStrategy();
     private ActionBarDrawerToggle mDrawerToggle;
 
     private final OnNavigationItemSelectedListener mNavigationItemSelectedListener = new OnNavigationItemSelectedListener() {
@@ -41,7 +46,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
                     startActivity(intent);
                     break;
                 case R.id.navigation_drawer_send_email:
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(getApplicationContext())
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(BaseDrawerActivity.this)
                             .setTitle("Send email")
                             .setMessage("Here you can send email to developer")
                             .setPositiveButton(android.R.string.ok, null)
@@ -56,14 +61,12 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         }
     };
 
-    public abstract int getView();
-
-    public abstract int getDefaultNavigationItem();
+    protected abstract BaseDrawerLoadingStrategy getLoadingStrategy();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getView());
+        setContentView(mLoadingStrategy.getView());
 
         mDrawer = (DrawerLayout) findViewById(R.id.base_drawer_layout);
         mNavigation = (NavigationView) findViewById(R.id.base_drawer_navigation_view);
@@ -71,17 +74,23 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
 
         setSupportActionBar(mToolbar);
 
-        mDrawerToggle = new ActionBarDrawerToggle(
-                this,
-                mDrawer,
-                mToolbar,
-                R.string.drawer_open,
-                R.string.drawer_close
-        );
-        mDrawer.addDrawerListener(mDrawerToggle);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(mLoadingStrategy.getActionBarTitle());
+        actionBar.setDisplayHomeAsUpEnabled(mLoadingStrategy.isDisplayHomeAsUpEnabled());
+
+        if (!mLoadingStrategy.isDisplayHomeAsUpEnabled()) {
+            mDrawerToggle = new ActionBarDrawerToggle(
+                    this,
+                    mDrawer,
+                    mToolbar,
+                    R.string.drawer_open,
+                    R.string.drawer_close
+            );
+            mDrawer.addDrawerListener(mDrawerToggle);
+        }
 
         mNavigation.setNavigationItemSelectedListener(mNavigationItemSelectedListener);
-        mNavigation.setCheckedItem(getDefaultNavigationItem());
+        checkNavigationViewItems();
     }
 
     @Override
@@ -98,14 +107,18 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        mDrawerToggle.syncState();
+        if (mDrawerToggle != null) {
+            mDrawerToggle.syncState();
+        }
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        mDrawerToggle.onConfigurationChanged(newConfig);
+        if (mDrawerToggle != null) {
+            mDrawerToggle.onConfigurationChanged(newConfig);
+        }
     }
 
     @Override
@@ -114,6 +127,27 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
             mDrawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        checkNavigationViewItems();
+    }
+
+    protected void checkNavigationViewItems() {
+        if (mLoadingStrategy.getDefaultNavigationItem() != -1) {
+            mNavigation.setCheckedItem(mLoadingStrategy.getDefaultNavigationItem());
+        } else {
+            uncheckNavigationViewItems();
+        }
+    }
+
+    protected void uncheckNavigationViewItems() {
+        for (int i = 0; i < mNavigation.getMenu().size(); i++) {
+            mNavigation.getMenu().getItem(i).setChecked(false);
         }
     }
 }
