@@ -1,1 +1,1 @@
-include ':baseactivity', ':searchview', ':maildialog', ':pushnotifications'
+include ':baseactivity', ':searchview', ':maildialog', ':pushnotifications', ':facebooklogin'
