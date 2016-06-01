@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Onboarding Experience</string>
+
+    <string name="activity_home_greeting">It is HomeScreen</string>
+    <string name="activity_home_show_onboarding">Show onboarding again</string>
+
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>
